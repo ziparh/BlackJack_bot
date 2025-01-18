@@ -34,6 +34,7 @@ class Blackjack:
 
         for card in hand:
             card_value = card[:-2]
+            # print(f'{card_value}: {card}, {hand}')
             value += score[card_value]
 
             if card_value == "A":
@@ -51,16 +52,18 @@ class Blackjack:
         if value <= 21:
             self.deal_card(self.player_hand)
             if self.calculate_hand(self.player_hand) >= 21:
+                await manager.update(data=manager.dialog_data)
+                await asyncio.sleep(1)
                 await self.stand(manager)
-        manager.dialog_data['plater_hand'] = self.player_hand
         await manager.update(data=manager.dialog_data)
 
-
     async def stand(self, manager: DialogManager):
-        while self.calculate_hand(self.dealer_hand) <= self.calculate_hand(self.player_hand):
+        while self.calculate_hand(self.dealer_hand) <= self.calculate_hand(self.player_hand) and \
+                    self.calculate_hand(self.player_hand) <= 21:
+
             self.deal_card(self.dealer_hand)
-            await asyncio.sleep(0.7)
             await manager.update(data=manager.dialog_data)
+            await asyncio.sleep(1)
 
         await self.game_end(manager)
 
@@ -89,11 +92,7 @@ class Blackjack:
         else:
             manager.dialog_data['wltext'] = f"Вы проиграли. Ваши очки: {player_value}, очки дилера: {dealer_value}."
             manager.dialog_data['winlose'] = "проигрыш"
-
         await manager.switch_to(MainDialog.end)
-
-
-
 
     async def start_game(self, manager: DialogManager):
         self.player_hand = []
@@ -104,12 +103,12 @@ class Blackjack:
 
         manager.dialog_data['player_hand'] = self.player_hand
         manager.dialog_data['dealer_hand'] = self.dealer_hand
+        await manager.switch_to(MainDialog.game)
+        await manager.show()
+        await asyncio.sleep(1.3)
 
         if self.calculate_hand(self.player_hand) == 21:
             await self.game_end(manager)
-
-        await manager.switch_to(MainDialog.game)
-
 
 bj = Blackjack()
 
@@ -129,6 +128,7 @@ async def blackjack_getter(dialog_manager: DialogManager, **_):
         'player_score': player_score,
         'dealer_score': dealer_score
     }
+
 
 async def game_end_getter(dialog_manager: DialogManager, **_):
     wltext = dialog_manager.dialog_data.get('wltext')

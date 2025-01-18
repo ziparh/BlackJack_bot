@@ -57,7 +57,7 @@ game_window = Window(
 game_end_window = Window(
     Format("*{wltext}*\n\n Ваша ставка была: {dep}\n Ваш {winlose} составил {wldep}"),
     Button(Const("Следущая игра"), id="next", on_click=lambda c, b, d: bj.start_game(d)),
-    Button(Const("Назад в меню"), id="menu", on_click=lambda c, b, d: d.swith_to(MainDialog.start)),
+    Button(Const("Назад в меню"), id="menu", on_click=lambda c, b, d: d.switch_to(MainDialog.start)),
     state=MainDialog.end,
     getter=game_end_getter
 )
