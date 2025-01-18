@@ -9,7 +9,7 @@ from aiogram_dialog.widgets.kbd import Button
 from aiogram_dialog.widgets.text import Const
 
 from option import TOKEN
-from windows import main_dialog, show_rules, show_balance
+from windows import main_dialog
 from states import MainDialog
 
 logging.basicConfig(level=logging.INFO)
@@ -22,7 +22,7 @@ async def set_commands(bot: Bot):
 
 # Обработчик для команды /start
 async def cmd_start(message: types.Message, dialog_manager: DialogManager):
-    await dialog_manager.start(MainDialog.start, mode=StartMode.NORMAL)
+    await dialog_manager.start(MainDialog.start, mode=StartMode.RESET_STACK)
 
 
 async def main():
