@@ -15,7 +15,7 @@ ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
 class Blackjack:
     def __init__(self):
-        self.deck = self.create_deck()
+        self.deck = []
 
         self.player_hand = []
         self.dealer_hand = []
@@ -95,8 +95,10 @@ class Blackjack:
         await manager.switch_to(MainDialog.end)
 
     async def start_game(self, manager: DialogManager):
+        self.deck = self.create_deck()
         self.player_hand = []
         self.dealer_hand = []
+
         self.deal_card(self.player_hand)
         self.deal_card(self.player_hand)
         self.deal_card(self.dealer_hand)
