@@ -26,18 +26,18 @@ class DataBase:
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user_id INTEGER NOT NULL,
-                    name TEXT NOT NULL,
+                    username TEXT NOT NULL,
                     balance INTEGER NOT NULL DEFAULT 100
                 )
                 ''')
         await self.conn.commit()
 
-    async def add_user(self, user_id, name):
+    async def add_user(self, user_id, username):
         try:
             await self.conn.execute('''
-                INSERT INTO users (user_id, name)
+                INSERT INTO users (user_id, username)
                 VALUES (?, ?)
-                ''', (user_id, name))
+                ''', (user_id, username))
             await self.conn.commit()
         except Exception as e:
             logging.error(f'Ошибка при добавлении пользователя: {e}')

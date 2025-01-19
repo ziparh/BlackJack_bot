@@ -33,7 +33,7 @@ async def cmd_start(message: types.Message, dialog_manager: DialogManager):
                 user = await db.get_user(message.from_user.id)
                 if not user:
                     await db.add_user(user_id=message.from_user.id,
-                                name=message.from_user.first_name,
+                                name=message.from_user.username,
                                 )
             await dialog_manager.start(MainDialog.menu, mode=StartMode.RESET_STACK)
 
@@ -42,7 +42,7 @@ async def cmd_start(message: types.Message, dialog_manager: DialogManager):
             user = await db.get_user(message.from_user.id)
             if not user:
                 await db.add_user(user_id=message.from_user.id,
-                                  name=message.from_user.first_name,
+                                  name=message.from_user.username,
                                   )
         await message.delete()
         await dialog_manager.start(MainDialog.menu, mode=StartMode.RESET_STACK)
