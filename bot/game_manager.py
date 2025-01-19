@@ -91,7 +91,6 @@ class Blackjack:
             manager.dialog_data['winlose'] = "выигрыш"
         else:
             manager.dialog_data['wltext'] = f"Вы проиграли. Ваши очки: {player_value}, очки дилера: {dealer_value}."
-            manager.dialog_data['winlose'] = "проигрыш"
         await manager.switch_to(MainDialog.end)
 
     async def start_game(self, manager: DialogManager):
@@ -99,18 +98,18 @@ class Blackjack:
 
         self.player_hand = []
         self.dealer_hand = []
-
         self.deal_card(self.player_hand)
         self.deal_card(self.player_hand)
         self.deal_card(self.dealer_hand)
 
         manager.dialog_data['player_hand'] = self.player_hand
         manager.dialog_data['dealer_hand'] = self.dealer_hand
+        await asyncio.sleep(0.3)
         await manager.switch_to(MainDialog.game)
-        await manager.show()
-        await asyncio.sleep(1.3)
 
         if self.calculate_hand(self.player_hand) == 21:
+            await manager.show()
+            await asyncio.sleep(1)
             await self.game_end(manager)
 
 
