@@ -59,7 +59,7 @@ class Blackjack:
         await manager.update(data=manager.dialog_data)
 
     async def stand(self, manager: DialogManager):
-        while self.calculate_hand(self.dealer_hand) <= self.calculate_hand(self.player_hand) and \
+        while self.calculate_hand(self.dealer_hand) < self.calculate_hand(self.player_hand) and \
                 self.calculate_hand(self.player_hand) <= 21:
             self.deal_card(self.dealer_hand)
             await manager.update(data=manager.dialog_data)
