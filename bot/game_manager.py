@@ -1,3 +1,4 @@
+import logging
 import random
 import asyncio
 
@@ -59,8 +60,7 @@ class Blackjack:
 
     async def stand(self, manager: DialogManager):
         while self.calculate_hand(self.dealer_hand) <= self.calculate_hand(self.player_hand) and \
-                    self.calculate_hand(self.player_hand) <= 21:
-
+                self.calculate_hand(self.player_hand) <= 21:
             self.deal_card(self.dealer_hand)
             await manager.update(data=manager.dialog_data)
             await asyncio.sleep(1)
@@ -96,6 +96,7 @@ class Blackjack:
 
     async def start_game(self, manager: DialogManager):
         self.deck = self.create_deck()
+
         self.player_hand = []
         self.dealer_hand = []
 
@@ -112,6 +113,7 @@ class Blackjack:
         if self.calculate_hand(self.player_hand) == 21:
             await self.game_end(manager)
 
+
 bj = Blackjack()
 
 
@@ -121,8 +123,9 @@ async def blackjack_getter(dialog_manager: DialogManager, **_):
     dealer_hand = dialog_manager.dialog_data.get('dealer_hand')
     player_score = bj.calculate_hand(player_hand)
     dealer_score = bj.calculate_hand(dealer_hand)
-    print(f"dep: {dep}, player_hand: {' '.join(player_hand)}, dealer_hand: {' '.join(dealer_hand)}, "
-          f"player_score: {player_score}, dealer_score: {dealer_score}")
+    logging.info(f"dep: {dep}, player_hand: {' '.join(player_hand)}, dealer_hand: {' '.join(dealer_hand)}, "
+                 f"player_score: {player_score}, dealer_score: {dealer_score}")
+
     return {
         'dep': dep,
         'player_hand': ' '.join(player_hand),
