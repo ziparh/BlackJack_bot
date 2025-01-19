@@ -140,6 +140,8 @@ async def game_end_getter(dialog_manager: DialogManager, **_):
     winlose = dialog_manager.dialog_data.get('winlose')
     dep = dialog_manager.dialog_data.get('dep', 0)
     wldep = dialog_manager.dialog_data.get('wldep', 0)
+    logging.info(f"{wltext}")
+
     return {
         'wltext': wltext,
         'winlose': winlose,
