@@ -33,12 +33,13 @@ async def show_rules(callback: CallbackQuery, button: Button, dialog_manager: Di
 
 
 start_window = Window(
-    Const("Добро пожаловать в Блэкджек!\n"),
+    Const("🎲 Добро пожаловать в Блэкджек!\n\n"
+          "Выберите, что вы хотите сделать:"),
     Button(Const("Начать игру"), id="play",
            on_click=lambda c, b, d: bj.start_game(d)),
     Button(Const("Посмотреть свой баланс"), id="balance", on_click=show_balance),
     Button(Const("Прочитать правила"), id="rules", on_click=show_rules),
-    state=MainDialog.start
+    state=MainDialog.menu
 )
 
 game_window = Window(
@@ -57,7 +58,7 @@ game_window = Window(
 game_end_window = Window(
     Format("*{wltext}*\n\n Ваша ставка была: {dep}\n Ваш {winlose} составил {wldep}"),
     Button(Const("Следущая игра"), id="next", on_click=lambda c, b, d: bj.start_game(d)),
-    Button(Const("Назад в меню"), id="menu", on_click=lambda c, b, d: d.switch_to(MainDialog.start)),
+    Button(Const("Назад в меню"), id="menu", on_click=lambda c, b, d: d.switch_to(MainDialog.menu)),
     state=MainDialog.end,
     getter=game_end_getter
 )

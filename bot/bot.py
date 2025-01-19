@@ -5,6 +5,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.types import BotCommand
 from aiogram_dialog import DialogManager, setup_dialogs, Dialog, StartMode
+from aiogram_dialog.api.exceptions import NoContextError
 from aiogram_dialog.widgets.kbd import Button
 from aiogram_dialog.widgets.text import Const
 
@@ -22,7 +23,16 @@ async def set_commands(bot: Bot):
 
 # Обработчик для команды /start
 async def cmd_start(message: types.Message, dialog_manager: DialogManager):
-    await dialog_manager.start(MainDialog.start, mode=StartMode.RESET_STACK)
+    try:
+        if dialog_manager.current_context().state == MainDialog.game:
+            await message.delete()
+            await message.answer("Вы неможете перейти в меню пока находитесь в игре")
+        else:
+            await dialog_manager.start(MainDialog.menu, mode=StartMode.RESET_STACK)
+
+    except NoContextError:
+        await message.delete()
+        await dialog_manager.start(MainDialog.menu, mode=StartMode.RESET_STACK)
 
 
 async def main():
