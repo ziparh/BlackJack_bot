@@ -29,17 +29,21 @@ async def cmd_start(message: types.Message, dialog_manager: DialogManager):
             await message.delete()
             await message.answer("Вы неможете перейти в меню пока находитесь в игре")
         else:
-            async with DataBase as db:
-                user = db.get_user(message.from_user.id)
-                print(user, type(user))
-                print(message.from_user.id, message.from_user.first_name, message.from_user.username)
+            async with DataBase() as db:
+                user = await db.get_user(message.from_user.id)
                 if not user:
-                    db.add_user(user_id=message.from_user.id,
+                    await db.add_user(user_id=message.from_user.id,
                                 name=message.from_user.first_name,
                                 )
             await dialog_manager.start(MainDialog.menu, mode=StartMode.RESET_STACK)
 
     except NoContextError:
+        async with DataBase() as db:
+            user = await db.get_user(message.from_user.id)
+            if not user:
+                await db.add_user(user_id=message.from_user.id,
+                                  name=message.from_user.first_name,
+                                  )
         await message.delete()
         await dialog_manager.start(MainDialog.menu, mode=StartMode.RESET_STACK)
 
@@ -47,7 +51,7 @@ async def cmd_start(message: types.Message, dialog_manager: DialogManager):
 async def main():
     logging.info("Bot is starting...")
     async with DataBase() as db:
-        db.create_db()
+        await db.create_db()
 
     bot = Bot(token=TOKEN)
     dp = Dispatcher()
